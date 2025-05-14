@@ -19,4 +19,12 @@ public class Item {
         this.title = title;
         this.price = price;
     }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
 }
