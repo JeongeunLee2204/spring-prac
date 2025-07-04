@@ -17,15 +17,20 @@ public class ItemController {
 
     private final ItemRepository itemRepository;
     private final ItemService itemService;
+    private final ItemSendService itemSendService;
 
     @PostConstruct
     public void init() {
-        itemRepository.deleteAll();
-        if (itemRepository.count() == 0) {
+        try {
             itemRepository.deleteAll();
-            itemRepository.save(new Item("바지", 10000));
-            itemRepository.save(new Item("셔츠", 15000));
-            itemRepository.save(new Item("신발끈", 30000));
+            if (itemRepository.count() == 0) {
+                itemRepository.save(new Item("바지", 10000));
+                itemRepository.save(new Item("셔츠", 15000));
+                itemRepository.save(new Item("신발끈", 30000));
+            }
+        } catch (Exception e) {
+            System.err.println("🔥🔥🔥 init() 예외 발생:");
+            e.printStackTrace(); // 실제 에러 콘솔에 출력
         }
     }
 
@@ -35,7 +40,7 @@ public class ItemController {
         List<Item> result = itemRepository.findAll();
 
         for (Item item : result) {
-            System.out.println("title = " + item.title);
+            System.out.println("title = " + item.getTitle());
         }
 
         model.addAttribute("items", result);
@@ -46,7 +51,6 @@ public class ItemController {
     String write(Model model){
         return "write.html";
     }
-
 //    @PostMapping("/add")
 //    String addPost(@RequestParam String title, @RequestParam Integer price) {
 //        Item item=new Ite`m();
@@ -55,19 +59,15 @@ public class ItemController {
 //        itemRepository.save(item);
 //        return "redirect:/list";
 //    }
-    @GetMapping("/detail/{id}")
-    String detail(@PathVariable Long id, Model model) {
-        Optional<Item> result = itemRepository.findById(id);
-        //var result=itemRepository.findById(1L);
-        if (result.isPresent()) {
-            System.out.println(result.get());
-            model.addAttribute("data", result.get());
-            return "detail.html";
-        }
-        else{
-            return "redirect:/list";
-        }
+@GetMapping("/detail/{id}")
+String detail(@PathVariable Long id, Model model) {
+    if (itemSendService.sendItem(id, model)) {
+        return "detail.html";
+    } else {
+        return "redirect:/list";
     }
+}
+
 
 
     @PostMapping("/add")

@@ -8,11 +8,12 @@ import org.springframework.stereotype.Service;
 public class ItemService {
 
     private final ItemRepository itemRepository;
-    private final ItemService itemService;
 
     public void saveItem(String title, Integer price){
-        //itemRepository.save(item);
-        Item item=new Item();
+        if(price < 0){
+            throw new RuntimeException("음수 안됨");
+        }
+        Item item = new Item();
         item.setTitle(title);
         item.setPrice(price);
         itemRepository.save(item);
