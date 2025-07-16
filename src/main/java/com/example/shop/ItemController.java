@@ -3,6 +3,7 @@ package com.example.shop;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -88,6 +89,13 @@ String detail(@PathVariable Long id, Model model) {
     ResponseEntity<String> deleteItem(@RequestParam Long id){
         itemRepository.deleteById(id);
         return ResponseEntity.status(200).body("삭제완료");
+    }
+
+    @PostMapping("/test2")
+    String test2(){
+        var result=new BCryptPasswordEncoder().encode("문자");
+        System.out.println(result);
+        return "redirect:/list";
     }
 }
 
