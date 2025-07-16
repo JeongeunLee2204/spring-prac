@@ -2,6 +2,7 @@ package com.example.shop;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public class ItemController {
                 itemRepository.save(new Item("신발끈", 30000));
             }
         } catch (Exception e) {
-            System.err.println("🔥🔥🔥 init() 예외 발생:");
+            System.err.println("init() 예외 발생:");
             e.printStackTrace(); // 실제 에러 콘솔에 출력
         }
     }
@@ -75,4 +76,18 @@ String detail(@PathVariable Long id, Model model) {
         itemService.saveItem(title,price);
         return "redirect:/list";
     }
+
+
+    @PostMapping("/test1")
+    String test1(@RequestBody Map<String,Object> body){
+        System.out.println(body.get("name"));
+        return "redirect:/list";
+    }
+
+    @DeleteMapping("/item")
+    ResponseEntity<String> deleteItem(@RequestParam Long id){
+        itemRepository.deleteById(id);
+        return ResponseEntity.status(200).body("삭제완료");
+    }
 }
+

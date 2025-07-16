@@ -13,13 +13,31 @@
 
 <div th:replace="~{nav.html::navbar}"/>
 
+<button class="btn">버튼
+</button>
+
 <div class="card" th:each="i : ${items}">
     <img src="https://placehold.co/300">
     <div>
         <h4 th:text="${i.title}">바지</h4>
         <a th:href="@{'/detail/'+${i.id}}">링크</a>
         <p th:text="${i.price}">7억</p>
+        <button th:onClick="fetch('/item?id=[[${i.id}]]', {method: 'DELETE'})
+.then(r=>r.text()).then(()=>{location.reload();})">삭제하기</button>
     </div>
 </div>
+
+<script>
+    document.querySelectorAll('.btn')[0].addEventListener('click', function(){
+    fetch('/test1',{
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({name:'kim'})
+    })
+    fetch('/test1?name="lee"&name="kwang"')
+
+    })
+</script>
+
 </body>
 </html>
