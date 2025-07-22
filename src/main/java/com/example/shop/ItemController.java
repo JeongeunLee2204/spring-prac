@@ -2,6 +2,8 @@ package com.example.shop;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -97,5 +99,14 @@ String detail(@PathVariable Long id, Model model) {
         System.out.println(result);
         return "redirect:/list";
     }
+    @GetMapping("/list/page/{abc}")
+    String getListPage(Model model, @PathVariable Integer abc){
+        Page<Item> result= itemRepository.findPageBy(PageRequest.of(abc-1,5));
+
+        model.addAttribute("items", result);
+        model.addAttribute("totalPages",result.getTotalPages());
+        return "list.html";
+    }
+
 }
 

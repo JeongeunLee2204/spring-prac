@@ -9,6 +9,15 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
+
+<style>
+    .current-page {
+        font-weight: bold;
+        text-decoration: underline;
+    }
+</style>
+
+
 <body>
 
 <div th:replace="~{nav.html::navbar}"/>
@@ -26,6 +35,17 @@
 .then(r=>r.text()).then(()=>{location.reload();})">삭제하기</button>
     </div>
 </div>
+
+<div>
+    <span th:each="i:${#numbers.sequence(1,totalPages)}">
+        <a th:href="@{'/list/page/'+${i}}"
+            th:text="${i}"
+            th:classappend="${i}==${currentPage}?'current-page' : ''">
+        </a>
+
+    </span>
+</div>
+
 
 <script>
     document.querySelectorAll('.btn')[0].addEventListener('click', function(){
