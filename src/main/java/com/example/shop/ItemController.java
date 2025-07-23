@@ -22,6 +22,7 @@ public class ItemController {
     private final ItemRepository itemRepository;
     private final ItemService itemService;
     private final ItemSendService itemSendService;
+    private final S3Service s3Service;
 
     @PostConstruct
     public void init() {
@@ -106,6 +107,14 @@ String detail(@PathVariable Long id, Model model) {
         model.addAttribute("items", result);
         model.addAttribute("totalPages",result.getTotalPages());
         return "list.html";
+    }
+
+    @GetMapping("/presigned-url")
+    @ResponseBody
+    String getURL(@RequestParam String filename){
+        System.out.println(filename);
+        var result = s3Service.createPresignedUrl("test/" + filename); // ⬅ 수정
+        return result;
     }
 
 }

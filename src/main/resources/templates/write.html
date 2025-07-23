@@ -1,21 +1,53 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-<link href="/main.css" rel="stylesheet">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link href="/main.css" rel="stylesheet">
 </head>
 <body>
 <form action="/add" method="POST">
-    <input name="title">
-    <input name="price">
+    <input name="title" placeholder="제목">
+    <input name="price" placeholder="가격">
     <button type="submit">전송</button>
 </form>
 
+<!-- 파일 선택 -->
+<input type="file" onchange="uploadImage(this)">
+<br>
+<img id="preview" src="" style="max-width:300px;">
 
+<script>
+    async function uploadImage(e) {
+        const file = e.files[0];
+        if (!file) return;
+
+        const name = encodeURIComponent(file.name);
+
+        // 1. 서버에서 Presigned URL 요청
+        const response = await fetch('/presigned-url?filename=' + name);
+        const presignedUrl = await response.text();
+        console.log("Presigned URL:", presignedUrl);
+
+        // 2. S3로 업로드 요청
+        const uploadResult = await fetch(presignedUrl, {
+            method: 'PUT',
+            body: file
+        });
+
+        console.log("Upload Result:", uploadResult);
+
+        if (uploadResult.ok) {
+            // 3. 업로드된 이미지 URL 추출
+            const uploadedUrl = presignedUrl.split('?')[0];
+            document.getElementById('preview').src = uploadedUrl;
+        } else {
+            alert("업로드 실패!");
+        }
+    }
+</script>
 </body>
 </html>
