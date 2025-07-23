@@ -3,12 +3,10 @@ package com.example.shop.member;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -47,7 +45,7 @@ public class MemberController {
         System.out.println(auth.isAuthenticated());
         System.out.println(auth.getPrincipal());
 
-        CustomUser result=(CustomUser) auth.getPrincipal();
+        com.example.shop.member.CustomUser result=(com.example.shop.member.CustomUser) auth.getPrincipal();
         System.out.println(result.displayName);
         return "mypage.html";
     }

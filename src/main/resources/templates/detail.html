@@ -21,5 +21,30 @@
         <p th:text="${data.price + '원'}">7억</p>
     </div>
 </div>
+
+<form action="/comment" method="POST">
+    <input name="content">
+    <input name="parent" type="hidden" th:value="${data.id}" >
+    <button>전송</button>
+</form>
+
+<form action="/order" method="post">
+    <input name="title" th:value="${data.title}">
+    <input name="price" th:value="${data.price}">
+    <input name="count" placeholder="count" value="1">
+    <button>주문하기</button>
+</form>
+
+
+<h3>댓글</h3>
+<div>
+    <ul>
+        <li th:each="c : ${comments}">
+            <span th:text="${c.username}">작성자</span> :
+            <span th:text="${c.content}">댓글 내용</span>
+        </li>
+    </ul>
+</div>
+
 </body>
 </html>
